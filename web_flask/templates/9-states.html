@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HBNB</title>
-</head>
-<body>
-    {% if state %}
-    <h1>State: {{ state.name }}</h1>
-    <H3>Cities:</H3>
-    {% elif states %}
-        <h1>States</h1>
-    {% else %}
-    <h1>Not Found!</h1>
-    {% endif %}
-    {% if state or states -%}
-        <ul>
-        {%- set vals = states.values() if states else state.cities -%}
-        {% for item in vals|sort(attribute='name') %}
-            <li>{{ item.id }}: <b>{{ item.name }}</b></li>
+<HTML lang="en">
+    <HEAD>
+        <TITLE>HBNB</TITLE>
+    </HEAD>
+    <BODY>
+    {% if state is mapping %}
+        <H1>States</H1>
+        <UL>
+        {% for s in state.values()|sort(attribute="name") %}
+            <LI>{{ s.id }}: <B>{{ s.name }}</B></LI>
         {% endfor %}
-    </ul>
-  {%- endif %}
-</body>
-</html>
+        </UL>
+    {% elif state is defined %}
+        <H1>State: {{ state.name }}</H1>
+        <H3>Cities:</H3>
+        <UL>
+        {% for city in state.cities|sort(attribute="name") %}
+            <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
+        {% endfor %}
+        </UL>
+    {% else %}
+        <H1>Not found!</H1>
+    {% endif %}
+    </BODY>
+</HTML>

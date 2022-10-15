@@ -1,19 +1,20 @@
-*, *:before, *:after: {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
+/*
+ * === Global style ===
+ */
 
+/* Body style */
 body {
-    font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-color: #484848;
-    font-size: 14px;
-    margin: 0;
-    padding: 0;
+  color: #484848;
+  font: 14px Circular, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+/* Container style */
 .container {
-    max-width: 1000px;
-    margin: 30px auto 30px auto;
-    position: relative;
+  margin: 30px auto;
+  max-width: 1000px;
+}
+
+/* Strong style */
+strong {
+  font-weight: bold;
 }
