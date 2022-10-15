@@ -1,26 +1,19 @@
-import unittest
-from datetime import datetime
-from models import *
-from console import HBNBCommand
+#!/usr/bin/python3
+""" """
+from tests.test_models.test_base_model import test_basemodel
+from models.state import State
 
 
-class Test_StateModel(unittest.TestCase):
-    """
-    Test the state model class
-    """
+class test_state(test_basemodel):
+    """ """
 
-    def setUp(self):
-        self.cli = HBNBCommand()
-        self.model = State()
+    def __init__(self, *args, **kwargs):
+        """ """
+        super().__init__(*args, **kwargs)
+        self.name = "State"
+        self.value = State
 
-    def tearDown(self):
-        self.cli.do_destroy("State " + self.model.id)
-
-    def test_var_initialization(self):
-        self.assertTrue(hasattr(self.model, "__tablename__"))
-        self.assertEqual(self.model.__tablename__, "states")
-        self.assertTrue(hasattr(self.model, "name"))
-
-
-if __name__ == "__main__":
-    unittest.main()
+    def test_name3(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.name), str)

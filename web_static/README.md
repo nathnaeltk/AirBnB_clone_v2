@@ -1,3 +1,1 @@
-#Project folder for simple static webpage for this project
-
-Currently does not load objects
+This directory implements webpage design.

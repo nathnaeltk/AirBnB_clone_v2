@@ -1,28 +1,29 @@
-import unittest
-from datetime import datetime
-from models import *
-from console import HBNBCommand
+#!/usr/bin/python3
+""" """
+from tests.test_models.test_base_model import test_basemodel
+from models.review import Review
 
 
-class Test_ReviewModel(unittest.TestCase):
-    """
-    Test the review model class
-    """
+class test_review(test_basemodel):
+    """ """
 
-    def setUp(self):
-        self.cli = HBNBCommand()
-        self.model = Review()
+    def __init__(self, *args, **kwargs):
+        """ """
+        super().__init__(*args, **kwargs)
+        self.name = "Review"
+        self.value = Review
 
-    def tearDown(self):
-        self.cli.do_destroy("Review " + self.model.id)
+    def test_place_id(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.place_id), str)
 
-    def test_var_initialization(self):
-        self.assertTrue(hasattr(self.model, "__tablename__"))
-        self.assertEqual(self.model.__tablename__, "reviews")
-        self.assertTrue(hasattr(self.model, "place_id"))
-        self.assertTrue(hasattr(self.model, "user_id"))
-        self.assertTrue(hasattr(self.model, "text"))
+    def test_user_id(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.user_id), str)
 
-
-if __name__ == "__main__":
-    unittest.main()
+    def test_text(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.text), str)

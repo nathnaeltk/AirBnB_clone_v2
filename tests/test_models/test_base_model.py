@@ -1,60 +1,99 @@
+#!/usr/bin/python3
+""" """
+from models.base_model import BaseModel
 import unittest
+import datetime
+from uuid import UUID
+import json
 import os
-from datetime import datetime
-from models import *
-from console import HBNBCommand
 
 
-@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', '') == "db", "db")
-class Test_BaseModel(unittest.TestCase):
-    """
-    Test the base model class
-    """
+class test_basemodel(unittest.TestCase):
+    """ """
+
+    def __init__(self, *args, **kwargs):
+        """ """
+        super().__init__(*args, **kwargs)
+        self.name = 'BaseModel'
+        self.value = BaseModel
 
     def setUp(self):
-        self.cli = HBNBCommand()
-        self.model1 = BaseModel()
-
-        test_args = {'created_at': datetime(2017, 2, 11, 2, 6, 55, 258849),
-                     'updated_at': datetime(2017, 2, 11, 2, 6, 55, 258966),
-                     'id': '46458416-e5d5-4985-aa48-a2b369d03d2a',
-                     'name': 'model1'}
-        self.model2 = BaseModel(test_args)
-        self.model2.save()
+        """ """
+        pass
 
     def tearDown(self):
-        self.cli.do_destroy("BaseModel 46458416-e5d5-4985-aa48-a2b369d03d2a")
+        try:
+            os.remove('file.json')
+        except:
+            pass
 
-    def test_instantiation(self):
-        self.assertIsInstance(self.model1, BaseModel)
-        self.assertTrue(hasattr(self.model1, "created_at"))
-        self.assertTrue(hasattr(self.model1, "id"))
-        self.assertTrue(hasattr(self.model1, "updated_at"))
+    def test_default(self):
+        """ """
+        i = self.value()
+        self.assertEqual(type(i), self.value)
 
-    def test_reinstantiation(self):
-        self.assertIsInstance(self.model2, BaseModel)
-        self.assertEqual(self.model2.id,
-                         '46458416-e5d5-4985-aa48-a2b369d03d2a')
-        self.assertEqual(self.model2.created_at,
-                         datetime(2017, 2, 11, 2, 6, 55, 258849))
+    def test_kwargs(self):
+        """ """
+        i = self.value()
+        copy = i.to_dict()
+        new = BaseModel(**copy)
+        self.assertFalse(new is i)
+
+    def test_kwargs_int(self):
+        """ """
+        i = self.value()
+        copy = i.to_dict()
+        copy.update({1: 2})
+        with self.assertRaises(TypeError):
+            new = BaseModel(**copy)
 
     def test_save(self):
-        old_time = self.model2.updated_at
-        self.model2.save()
-        self.assertNotEqual(old_time, self.model2.updated_at)
+        """ Testing save """
+        i = self.value()
+        i.save()
+        key = self.name + "." + i.id
+        with open('file.json', 'r') as f:
+            j = json.load(f)
+            self.assertEqual(j[key], i.to_dict())
 
-    def test_to_json(self):
-        jsonified = self.model2.to_json()
-        self.assertNotEqual(self.model2.__dict__, jsonified)
-        self.assertNotIsInstance(jsonified["created_at"], datetime)
-        self.assertNotIsInstance(jsonified["updated_at"], datetime)
-        self.assertEqual(jsonified["created_at"], '2017-02-11 02:06:55.258849')
-        self.assertTrue(hasattr(jsonified, "__class__"))
-        self.assertEqual(jsonified["__class__"], "BaseModel")
+    def test_str(self):
+        """ """
+        i = self.value()
+        self.assertEqual(str(i), '[{}] ({}) {}'.format(self.name, i.id,
+                         i.__dict__))
 
-    def test_to_json_no_sa_instance_state(self):
-        jsonified = self.model2.to_json()
-        self.assertFalse(hasattr(jsonified, "_sa_instance_state"))
+    def test_todict(self):
+        """ """
+        i = self.value()
+        n = i.to_dict()
+        self.assertEqual(i.to_dict(), n)
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_kwargs_none(self):
+        """ """
+        n = {None: None}
+        with self.assertRaises(TypeError):
+            new = self.value(**n)
+
+    def test_kwargs_one(self):
+        """ """
+        n = {'Name': 'test'}
+        with self.assertRaises(KeyError):
+            new = self.value(**n)
+
+    def test_id(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.id), str)
+
+    def test_created_at(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.created_at), datetime.datetime)
+
+    def test_updated_at(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.updated_at), datetime.datetime)
+        n = new.to_dict()
+        new = BaseModel(**n)
+        self.assertFalse(new.created_at == new.updated_at)

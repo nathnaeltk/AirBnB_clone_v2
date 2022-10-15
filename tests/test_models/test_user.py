@@ -1,29 +1,34 @@
-import unittest
-from datetime import datetime
-from models import *
-from console import HBNBCommand
+#!/usr/bin/python3
+""" """
+from tests.test_models.test_base_model import test_basemodel
+from models.user import User
 
 
-class Test_UserModel(unittest.TestCase):
-    """
-    Test the user model class
-    """
+class test_User(test_basemodel):
+    """ """
 
-    def setUp(self):
-        self.cli = HBNBCommand()
-        self.model = User(email="hello@gmail.com", password="pwd")
+    def __init__(self, *args, **kwargs):
+        """ """
+        super().__init__(*args, **kwargs)
+        self.name = "User"
+        self.value = User
 
-    def tearDown(self):
-        self.cli.do_destroy("User " + self.model.id)
+    def test_first_name(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.first_name), str)
 
-    def test_var_initialization(self):
-        self.assertTrue(hasattr(self.model, "__tablename__"))
-        self.assertEqual(self.model.__tablename__, "users")
-        self.assertTrue(hasattr(self.model, "email"))
-        self.assertTrue(hasattr(self.model, "password"))
-        self.assertTrue(hasattr(self.model, "first_name"))
-        self.assertTrue(hasattr(self.model, "last_name"))
+    def test_last_name(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.last_name), str)
 
+    def test_email(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.email), str)
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_password(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.password), str)
